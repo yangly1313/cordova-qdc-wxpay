@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  id="com.qdc.plugins.wxpay"
+  version="1.0.0">
+  <name>WeixinPay</name>
+
+  <js-module src="www/wxpay.js" name="wxpay">
+    <clobbers target="wxpay" />
+  </js-module>
+
+  <!-- android -->
+  <platform name="android">
+
+    <config-file target="res/xml/config.xml" parent="/*">
+      <feature name="WeixinPay">
+        <param name="android-package" value="com.qdc.plugins.weixin.WeixinPay" />
+      </feature>
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/*">
+      <uses-permission android:name="android.permission.INTERNET" />
+      <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+      <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    </config-file>
+
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <activity
+            android:name="com.qdc.plugins.weixin.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleTop"/>
+      <receiver android:name="com.qdc.plugins.weixin.AppRegister">
+        <intent-filter>
+          <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
+        </intent-filter>
+      </receiver>
+    </config-file>
+
+    <source-file src="src/android/WeixinPay.java" target-dir="src/com/qdc/plugins/weixin" />
+    <source-file src="src/android/AppRegister.java" target-dir="src/com/qdc/plugins/weixin" />
+    <source-file src="src/android/WXPayEntryActivity.java" target-dir="src/com/qdc/plugins/weixin" />
+    <source-file src="src/android/Util.java" target-dir="src/com/qdc/plugins/weixin" />
+    <source-file src="libs/libammsdk.jar" target-dir="libs" />
+  </platform>
+
+</plugin>
