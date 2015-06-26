@@ -50,5 +50,6 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 			builder.setMessage("微信支付结果：" + resp.errStr +";code=" + String.valueOf(resp.errCode));
 			builder.show();
 		}
+		this.finish();
 	}
 }
