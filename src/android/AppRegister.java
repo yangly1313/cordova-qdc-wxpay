@@ -13,6 +13,6 @@ public class AppRegister extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		final IWXAPI api = WXAPIFactory.createWXAPI(context, null);
 
-		api.registerApp(WeixinPay.APP_ID);
+		api.registerApp(Constants.APP_ID);
 	}
 }
