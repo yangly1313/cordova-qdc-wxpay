@@ -32,6 +32,7 @@
 * 事先前调用后台预支付API生成订单数据及签名数据
 * 调用plugin的JS方法【wxpay.payment】进行支付
 
+```js
 	**wxpay.payment(json, cb_success, cb_failure);**
 	# 参数说明：格式为JSON格式
 	# cb_success:调用成功回调方法
@@ -46,5 +47,5 @@
 	sign: 签名
 	}
 	注：订单总金额，只能为整数，单位为【分】，参数值不能带小数。
-
+```
 
