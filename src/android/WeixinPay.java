@@ -22,6 +22,8 @@ public class WeixinPay extends CordovaPlugin {
 
 	/** JS回调接口对象 */
 	public static CallbackContext cbContext = null;
+	
+	public static IWXAPI wxAPI;
 
 	/** LOG TAG */
 	private static final String LOG_TAG = WeixinPay.class.getSimpleName();
@@ -46,8 +48,7 @@ public class WeixinPay extends CordovaPlugin {
 			callbackContext.sendPluginResult(pluginResult);
 
 			// 参数检查
-			String jsonStr = args.getString(0);
-			if (jsonStr == null || "".equals(jsonStr)) {
+			if (args.length() != 1) {
 				LOG.e(LOG_TAG, "args is empty", new NullPointerException());
 				ret = false;
 	            PluginResult result = new PluginResult(PluginResult.Status.ERROR, "args is empty");
@@ -56,7 +57,7 @@ public class WeixinPay extends CordovaPlugin {
 				return ret;
 			}
 
-			JSONObject jsonObj = new JSONObject(jsonStr);
+			JSONObject jsonObj = args.getJSONObject(0);
 
 			final String appid = jsonObj.getString("appid");
 			if (appid == null || "".equals(appid)) {
@@ -125,8 +126,17 @@ public class WeixinPay extends CordovaPlugin {
 			//////////////////////
 			// 请求微信支付
 			//////////////////////
-			final IWXAPI msgApi = WXAPIFactory.createWXAPI(cordova.getActivity(), null);
-			msgApi.registerApp(appid);
+			wxAPI = WXAPIFactory.createWXAPI(webView.getContext(), appid, true);
+			wxAPI.registerApp(appid);
+			
+			if (!wxAPI.isWXAppInstalled()) {
+				LOG.e(LOG_TAG, "Wechat is not installed", new IllegalAccessException());
+				ret = false;
+	            PluginResult result = new PluginResult(PluginResult.Status.ERROR, "Wechat is not installed");
+	            result.setKeepCallback(true);
+	            cbContext.sendPluginResult(result);
+				return ret;
+			}
 
 			LOG.d(LOG_TAG, "WeixinPay#payment.end");
 
@@ -142,7 +152,7 @@ public class WeixinPay extends CordovaPlugin {
 					payreq.timeStamp = timestamp;
 					payreq.sign = sign;
 
-					boolean ret = msgApi.sendReq(payreq);
+					boolean ret = wxAPI.sendReq(payreq);
 					if (!ret) {
 			            PluginResult result = new PluginResult(PluginResult.Status.ERROR, "unifiedorder requst failured.");
 			            result.setKeepCallback(true);

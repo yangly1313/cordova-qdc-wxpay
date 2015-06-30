@@ -11,6 +11,10 @@
 
   <!-- android -->
   <platform name="android">
+    <hook type="after_plugin_add" src="scripts/android-install.js" />
+    <hook type="after_plugin_install" src="scripts/android-install.js" />
+    <hook type="before_plugin_rm" src="scripts/android-install.js" />
+    <hook type="before_plugin_uninstall" src="scripts/android-install.js" />
 
     <config-file target="res/xml/config.xml" parent="/*">
       <feature name="WeixinPay">
@@ -26,19 +30,20 @@
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
       <activity
-            android:name="com.qdc.plugins.weixin.WXPayEntryActivity"
-            android:exported="true"
-            android:launchMode="singleTop"/>
-      <receiver android:name="com.qdc.plugins.weixin.AppRegister">
+        android:name=".wxapi.WXPayEntryActivity"
+        android:exported="true"
+        android:launchMode="singleTop">
         <intent-filter>
-          <action android:name="com.tencent.mm.plugin.openapi.Intent.ACTION_REFRESH_WXAPP" />
+          <action android:name="android.intent.action.VIEW"/>
+          <category android:name="android.intent.category.DEFAULT"/>
+          <data android:scheme="Anything"/>
         </intent-filter>
-      </receiver>
+      </activity>
     </config-file>
 
     <source-file src="src/android/WeixinPay.java" target-dir="src/com/qdc/plugins/weixin" />
     <source-file src="src/android/AppRegister.java" target-dir="src/com/qdc/plugins/weixin" />
-    <source-file src="src/android/WXPayEntryActivity.java" target-dir="src/com/qdc/plugins/weixin" />
+    <!--<source-file src="src/android/WXPayEntryActivity.java" target-dir="src/com/qdc/plugins/weixin/wxapi" />-->
     <source-file src="src/android/Constants.java" target-dir="src/com/qdc/plugins/weixin" />
     <source-file src="libs/android/libammsdk.jar" target-dir="libs" />
   </platform>
