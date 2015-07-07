@@ -1,6 +1,7 @@
 package __PACKAGE_NAME__;
 
 import org.apache.cordova.PluginResult;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -42,9 +43,22 @@ public class WXPayEntryActivity extends Activity implements IWXAPIEventHandler{
 
     if (resp.getType() == ConstantsAPI.COMMAND_PAY_BY_WX) {
       
-            PluginResult result = new PluginResult(PluginResult.Status.ERROR, "微信支付结果：" + resp.errStr +";code=" + String.valueOf(resp.errCode));
-            result.setKeepCallback(true);
-            WeixinPay.cbContext.sendPluginResult(result);
+    	JSONObject json = new JSONObject();
+    	
+    	try {
+	    	if (resp.errStr != null && resp.errStr.length() >= 0) {
+	    		json.put("errStr", resp.errStr);
+	    	} else {
+	    		json.put("errStr", "");
+	    	}
+	    	json.put("code", resp.errCode);
+    	} catch (Exception e) {
+    		Log.e(LOG_TAG, e.getMessage(), e);
+    	}
+
+        PluginResult result = new PluginResult(PluginResult.Status.ERROR, json.toString());
+        result.setKeepCallback(true);
+        WeixinPay.cbContext.sendPluginResult(result);
     }
 
     finish();
