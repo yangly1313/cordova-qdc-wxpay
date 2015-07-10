@@ -168,7 +168,16 @@
         {
             NSString *strMsg = [NSString stringWithFormat:@"支付结果：retcode = %d, retstr = %@", resp.errCode,resp.errStr];
             
-            CDVPluginResult *commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:strMsg];
+            CDVPluginResult *commandResult = nil;
+            
+            if (resp.errCode == 0)
+            {
+                commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:strMsg];
+            }
+            else
+            {
+                commandResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:strMsg];
+            }
             
             [self.commandDelegate sendPluginResult:commandResult callbackId:self.currentCallbackId];
         }
