@@ -82,7 +82,7 @@
         sign = [params objectForKey:@"sign"];
 
         // 向微信注册
-        [WXApi registerApp:appid];
+        [WXApi registerApp:appid withDescription:@"xiaotaiyi 2.0"];
         
         if (![WXApi isWXAppInstalled]) {
             [self failWithCallbackID:command.callbackId withMessage:@"未安装微信"];
@@ -95,7 +95,7 @@
         req.prepayId = prepayid;
         req.nonceStr = noncestr;
         req.timeStamp = timestamp.intValue;
-        req.package = package;
+        req.package = @"Sign=WXPay";
         req.sign = sign;
         
         [WXApi sendReq:req];
